@@ -1,0 +1,40 @@
+import serial
+import time
+
+# 아두이노와 연결된 포트와 속도 설정
+SERIAL_PORT = 'COM3'  # 아두이노에 맞게 포트 수정
+BAUD_RATE = 9600
+
+# 시리얼 통신 시작
+arduino = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
+time.sleep(2)  # 아두이노 리셋 대기
+
+def read_sensor():
+    try:
+        if arduino.in_waiting > 0:
+            line = arduino.readline().decode('utf-8').strip()
+            data = line.split(',')
+            if len(data) == 3:
+                ir_sensor = int(data[0])     # 적외선 센서 (사람 감지)
+                umbrella_sensor = int(data[1])  # 우산 유무 감지
+                sound_sensor = int(data[2])  # 소리 센서 값
+                return {
+                    'ir': ir_sensor,
+                    'umbrella': umbrella_sensor,
+                    'sound': sound_sensor
+                }
+    except Exception as e:
+        print(f"센서 데이터 읽기 오류: {e}")
+    return None
+
+# 테스트 실행
+def main():
+    print("센서 데이터 수신 중...")
+    while True:
+        sensor_data = read_sensor()
+        if sensor_data:
+            print(f"IR: {sensor_data['ir']} | 우산: {sensor_data['umbrella']} | 소리: {sensor_data['sound']}")
+        time.sleep(1)
+
+if __name__ == '__main__':
+    main()
