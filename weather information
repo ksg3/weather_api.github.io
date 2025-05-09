@@ -1,0 +1,36 @@
+# 날씨 정보 수집
+import requests
+from datetime import datetime
+
+# 기상청 api
+API_KEY = 'api_key'
+BASE_URL = 'base_url'
+
+def get_weather(city='Seoul'):
+    params = {
+        'q': city,
+        'appid': API_KEY,
+        'units': 'metric',
+        'lang': 'kr'
+    }
+    response = requests.get(BASE_URL, params=params)
+    if response.status_code != 200:
+        raise Exception(f'API 호출 오류: {response.status_code}, {response.text}')
+
+    data = response.json()
+    weather = {
+        'city': city,
+        'temp': data['main']['temp'],
+        'humidity': data['main']['humidity'],
+        'description': data['weather'][0]['description'],
+        'icon': data['weather'][0]['icon']
+    }
+    return weather
+
+# 테스트 출력
+if __name__ == '__main__':
+    weather = get_weather('Seoul')
+    print(f"{weather['city']} 날씨")
+    print(f"기온: {weather['temp']}°C")
+    print(f"습도: {weather['humidity']}%")
+    print(f"설명: {weather['description']}")
