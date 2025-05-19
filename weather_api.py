@@ -1,9 +1,10 @@
+import pdb
 import requests
 import tkinter as tk
 from tkinter import ttk
 from datetime import datetime, timedelta
 
-API_KEY = "여기에 api_key"
+API_KEY = "YNI8%2B6EYU5IfMLTOCZ4F7YaS711vY1b7UTj8COSPPk6Zuw1RD0pRJagFpcoISGsxcrbwMBlj5%2FOQmY%2Fl%2FG2WaA%3D%3D"
 
 
 LOCATION_GRID = {
